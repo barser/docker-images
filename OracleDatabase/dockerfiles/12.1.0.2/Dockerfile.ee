@@ -37,7 +37,10 @@ ENV ORACLE_BASE=/opt/oracle \
     CONFIG_RSP="dbca.rsp.tmpl" \
     PWD_FILE="setPassword.sh" \
     PERL_INSTALL_FILE="installPerl.sh" \
-    RUN_FILE="runOracle.sh"
+    RUN_FILE="runOracle.sh" \
+    http_proxy=http://192.168.99.1:3128/ \
+	https_proxy=http://192.168.99.1:3128/
+
 
 # Use second ENV so that variable get substituted
 ENV INSTALL_DIR=$ORACLE_BASE/install \
@@ -49,6 +52,11 @@ ENV INSTALL_DIR=$ORACLE_BASE/install \
 # -------------
 COPY $INSTALL_FILE_1 $INSTALL_FILE_2 $INSTALL_RSP $PERL_INSTALL_FILE $INSTALL_DIR/
 COPY $RUN_FILE $CONFIG_RSP $PWD_FILE $ORACLE_BASE/
+
+# Setup Moscow timezone
+# ------------------------------------------------------------
+RUN ln -sf /usr/share/zoneinfo/Europe/Moscow /etc/localtime	
+
 
 # Setup filesystem and oracle user
 # Adjust file permissions, go to /opt/oracle as user 'oracle' to proceed with Oracle installation
